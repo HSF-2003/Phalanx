@@ -327,17 +327,17 @@ function resetTeam(team){
         allpeices.push(RHopliteL, RHopliteR)
         
     
-        // RArcherR0 = new Archer(1, 6, color)
-        // RArcherR1 = new Archer(2, 6 ,color)
-        // RArcherL0 = new Archer(5, 6, color)
-        // RArcherL1 = new Archer(6, 6, color)
-        // allpeices.push(RArcherR0, RArcherR1, RArcherL0, RArcherL1)
+        RArcherR0 = new Archer(1, 6, color)
+        RArcherR1 = new Archer(2, 6 ,color)
+        RArcherL0 = new Archer(5, 6, color)
+        RArcherL1 = new Archer(6, 6, color)
+        allpeices.push(RArcherR0, RArcherR1, RArcherL0, RArcherL1)
 
 
 
         RAux0 = new Auxiliary(1, 7, color, "LR")
         RAux1 = new Auxiliary(1, 7, color, "UL")
-        RAux2 = new Auxiliary(2, 5, color, "UR")
+        RAux2 = new Auxiliary(2, 7, color, "UR")
         RAux3 = new Auxiliary(3, 7, color, "LR")
         RAux4 = new Auxiliary(4, 7, color, "LL")
         RAux5 = new Auxiliary(5, 7, color, "UL")
