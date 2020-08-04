@@ -148,11 +148,11 @@ function createArcher(x, y){
     
 }
 
-allpeices = []
+ap = []
 
 function refreshAll() {
-    for (i = 0; i <= allpeices.length-1; i++){
-        allpeices[i].refresh()
+    for (i = 0; i <= ap.length-1; i++){
+        ap[i].refresh()
     }
 }
 
@@ -166,7 +166,7 @@ class Syntagma {
         if (team == blue){
             this.rotation = 180
         }
-
+        this.type = Syntagma
         this.x = x
         this.y = y
         this.color = color
@@ -191,6 +191,7 @@ class Syntagma {
 class Hoplite {
     constructor(x, y, team, side, color){
         this.team = team
+        this.side = side
         if (team == red){
             if (side == "left"){
                 this.rotation = 90
@@ -208,6 +209,7 @@ class Hoplite {
                 this.rotation = 180
             }
         }
+        this.type = Hoplite
         this.x = x
         this.y = y
         this.color = color
@@ -265,6 +267,8 @@ class Auxiliary {
         if (direction == "LL"){
             this.rotation = 270
         }
+        this.direction = direction
+        this.type = Auxiliary
         this.x = x
         this.y = y
         this.color = color
@@ -290,18 +294,18 @@ function resetTeam(team){
     if (team == "blue" || team == null){
         color = blue
         BSyntagma = new Syntagma(3, 1, color, color)
-        allpeices.push(BSyntagma)
+        ap.push(BSyntagma)
         
         BHopliteR = new Hoplite(0, 0, color, "right", color)
         BHopliteL = new Hoplite(7, 0, color, "left", color)
-        allpeices.push(BHopliteL, BHopliteR)
+        ap.push(BHopliteL, BHopliteR)
         
     
         BArcherR0 = new Archer(1, 1, color)
         BArcherR1 = new Archer(2, 1 ,color)
         BArcherL0 = new Archer(5, 1, color)
         BArcherL1 = new Archer(6, 1, color)
-        allpeices.push(BArcherR0, BArcherR1, BArcherL0, BArcherL1)
+        ap.push(BArcherR0, BArcherR1, BArcherL0, BArcherL1)
 
 
 
@@ -313,25 +317,25 @@ function resetTeam(team){
         BAux5 = new Auxiliary(5, 0, color, "LL")
         BAux6 = new Auxiliary(6, 0, color, "LR")
         BAux7 = new Auxiliary(6, 0, color, "UL")
-        allpeices.push(BAux0, BAux1, BAux2, BAux3, BAux4, BAux5, BAux6, BAux7)
+        ap.push(BAux0, BAux1, BAux2, BAux3, BAux4, BAux5, BAux6, BAux7)
     }
     if (team == "red" || team == null){
         ctx.fillStyle = red
         
         color = red
         RSyntagma = new Syntagma(3, 6, color, color)
-        allpeices.push(RSyntagma)
+        ap.push(RSyntagma)
         
         RHopliteR = new Hoplite(0, 6, color, "right", color)
         RHopliteL = new Hoplite(7, 6, color, "left", color)
-        allpeices.push(RHopliteL, RHopliteR)
+        ap.push(RHopliteL, RHopliteR)
         
     
         RArcherR0 = new Archer(1, 6, color)
-        RArcherR1 = new Archer(2, 6 ,color)
+        RArcherR1 = new Archer(2, 4 ,color)
         RArcherL0 = new Archer(5, 6, color)
         RArcherL1 = new Archer(6, 6, color)
-        allpeices.push(RArcherR0, RArcherR1, RArcherL0, RArcherL1)
+        ap.push(RArcherR0, RArcherR1, RArcherL0, RArcherL1)
 
 
 
@@ -343,7 +347,7 @@ function resetTeam(team){
         RAux5 = new Auxiliary(5, 7, color, "UL")
         RAux6 = new Auxiliary(6, 7, color, "UR")
         RAux7 = new Auxiliary(6, 7, color, "LL")
-        allpeices.push(RAux0, RAux1, RAux2, RAux3, RAux4, RAux5, RAux6, RAux7)
+        ap.push(RAux0, RAux1, RAux2, RAux3, RAux4, RAux5, RAux6, RAux7)
     }
 }
 
@@ -385,20 +389,20 @@ function clicked(){
     mousey = event.clientY;     
     coor = "X coords: " + mousex + ", Y coords: " + mousey;
     currentlyclicked = null
-    for (i = 0; i <= allpeices.length-1; i++){
-        if (allpeices[i] instanceof Archer){
-           archpos = [allpeices[i].x, allpeices[i].y]
+    for (i = 0; i <= ap.length-1; i++){
+        if (ap[i] instanceof Archer){
+           archpos = [ap[i].x, ap[i].y]
            floorcursorpos = [Math.floor(mousex / block), Math.floor(mousey / block)]
            if (archpos[0] == floorcursorpos[0] && archpos[1] == floorcursorpos[1]){
-            currentlyclicked = allpeices[i]
+            currentlyclicked = ap[i]
            }
         }
 
         
-        if (allpeices[i] instanceof Hoplite){
-            Hoplitex = allpeices[i].x
-            Hoplitey = allpeices[i].y
-            HopliteRotation = allpeices[i].rotation
+        if (ap[i] instanceof Hoplite){
+            Hoplitex = ap[i].x
+            Hoplitey = ap[i].y
+            HopliteRotation = ap[i].rotation
             p1 = 0
             if (HopliteRotation == 0 || HopliteRotation == 90){
                 hopsquarepos = [Hoplitex, Hoplitey + 1]
@@ -426,68 +430,75 @@ function clicked(){
             floorcursorpos = [Math.floor(mousex / block), Math.floor(mousey / block)]
             
             if (hopsquarepos[0] == floorcursorpos[0] && hopsquarepos[1] == floorcursorpos[1]){
-                currentlyclicked = allpeices[i]
+                currentlyclicked = ap[i]
             }
             if (insideTriangle){
-                currentlyclicked = allpeices[i]
+                currentlyclicked = ap[i]
             }
         }
         
         
-        if (allpeices[i] instanceof Syntagma){
-            syntagmax = allpeices[i].x
-            syntagmay = allpeices[i].y 
+        if (ap[i] instanceof Syntagma){
+            syntagmax = ap[i].x
+            syntagmay = ap[i].y 
             synTip = 0
             synPoint1 = 0
             synPoint2 = 0
-            if (allpeices[i].rotation == 0){
+            if (ap[i].rotation == 0){
                 synTip = [(syntagmax + 1) * block, syntagmay * block]
                 synPoint1 = [syntagmax * block, (syntagmay + 1) * block]
                 synPoint2 = [(syntagmax + 2) * block, (syntagmay + 1) * block]
             }
-            if (allpeices[i].rotation == 180){
+            if (ap[i].rotation == 180){
                 synTip = [(syntagmax + 1) * block, ((syntagmay + 1) * block)]
                 synPoint1 = [syntagmax * block, syntagmay * block]
                 synPoint2 = [(syntagmax + 2) * block, syntagmay * block]
             }
             if (isInsideTriangle(mousex, mousey, synTip[0], synTip[1], synPoint1[0], synPoint1[1], synPoint2[0], synPoint2[1]) == true){
-                currentlyclicked = allpeices[i]
+                currentlyclicked = ap[i]
             }
         }
 
-        if (allpeices[i] instanceof Auxiliary){
-            auxx = allpeices[i].x
-            auxy = allpeices[i].y
+        if (ap[i] instanceof Auxiliary){
+            auxx = ap[i].x
+            auxy = ap[i].y
 
-            if (allpeices[i].rotation == 0){
+            if (ap[i].rotation == 0){
                 auxtip = [auxx * block, (auxy + 1) * block]
                 aux1 = [auxx * block, auxy * block]
                 aux2 = [(auxx + 1) * block, (auxy + 1) * block]
             }
-            if (allpeices[i].rotation == 90){
+            if (ap[i].rotation == 90){
                 auxtip = [auxx * block, auxy * block]
                 aux1 = [(auxx + 1) * block, auxy * block]
                 aux2 = [auxx * block, (auxy + 1) * block]
             }
-            if (allpeices[i].rotation == 180){
+            if (ap[i].rotation == 180){
                 auxtip = [(auxx + 1) * block, auxy * block]
                 aux1 = [(auxx + 1) * block, (auxy + 1) * block]
                 aux2 = [auxx * block, auxy * block]
             }
-            if (allpeices[i].rotation == 270){
+            if (ap[i].rotation == 270){
                 auxtip = [(auxx + 1) * block, (auxy + 1) * block]
                 aux1 = [(auxx + 1) * block, auxy * block]
                 aux2 = [auxx * block, (auxy + 1) * block]
             }
 
             if (isInsideTriangle(mousex, mousey, auxtip[0], auxtip[1], aux1[0], aux1[1], aux2[0], aux2[1]) == true){
-                currentlyclicked = allpeices[i]
+                currentlyclicked = ap[i]
             }   
         }
     }
     if (currentlyclicked != null){
-        initiateMove(currentlyclicked)
-        currentlyclicked = null
+        if (currentlyclicked.color != ghost){
+            console.log("not ghost")
+            initiateMove(currentlyclicked)
+            lastclicked = currentlyclicked
+            currentlyclicked = null
+        }else{
+            console.log("ghost")
+            lastclicked.move(currentlyclicked.x, currentlyclicked.y)
+        }
     } else {
         cls()
         drawMap()
@@ -495,33 +506,45 @@ function clicked(){
     }
 }
 
-function searchLoc(x, y){
+function searchLoc(x, y, tile){
     if (x > 7 || y > 7 || x < 0 || y < 0){
         return(true)
     }
     
+
+
     peices = null
-    for (j = 0; j < allpeices.length; j++){
-        if (allpeices[j].x == x && allpeices[j].y == y){
+    for (j = 0; j < ap.length; j++){
+        if (ap[j].x == x && ap[j].y == y){
             
-            peices = allpeices[j]
+            peices = ap[j]
         }
-        if (allpeices[j] instanceof Syntagma && allpeices[j].x + 1 == x && allpeices[j].y == y){
+        if ((ap[j] instanceof Syntagma && ap[j].x + 1 == x && ap[j].y == y) || (ap[j] instanceof Hoplite && ap[j].y + 1 == y && ap[j].x == x)){
             
-            peices = allpeices[j]
-        }
-        if (allpeices[j] instanceof Hoplite && allpeices[j].y + 1 == y && allpeices[j].x == x){
-            
-            peices = allpeices[j]
+            peices = ap[j]
         }
     }
-    
+
+
     if (peices != null){
         return(true)
     }else{
         return(false)
     }
 }
+
+function drawGhost(x, y, type){
+    if (type instanceof Syntagma && x != 7){
+        ghosts[x * y] = new Syntagma(x, y, type.team, ghost)
+    }
+    if (type instanceof Auxiliary){
+        ghosts[x * y] = new Auxiliary(x, y, ghost, type.direction)
+    }
+    if (type instanceof Hoplite){
+        ghosts[x * y] = new Hoplite(x, y, type.team, type.side, ghost)
+    }
+}
+
 
 
 
@@ -534,28 +557,99 @@ function initiateMove(p){
     p.refresh()
     p.color = oldcolor
     ghosts = new Array()
+    finished = []
     if (true){
         if (p instanceof Archer){
             finished = []
-            for (i = 0; i < 8; i++){
-                if (searchLoc(p.x, p.y - i) == false){
-                    ghosts[i] = new Archer(p.x, p.y - i, ghost)
-                    
+            for (i = 1; i < 8; i++){
+                if (searchLoc(p.x, p.y - i) == false && finished[0] != true){
+                    ghosts[i] = new Archer(p.x, p.y - i, ghost)  
+                } else {
+                    finished[0] = true 
                 }
-                if (searchLoc(p.x + i, p.y - i) == false){
+                if (searchLoc(p.x + i, p.y - i) == false && finished[1] != true){
                     ghosts[i] = new Archer(p.x + i, p.y - i, ghost)
+                } else {
+                    finished[1] = true  
                 }
-                if (searchLoc(p.x + i, p.y) == false){
+                if (searchLoc(p.x + i, p.y) == false && finished[2] != true){
                     ghosts[i] = new Archer(p.x + i, p.y, ghost)
+                } else {
+                    finished[2] = true  
                 }
-                if (searchLoc(p.x + i, p.y + i) == false){
+                if (searchLoc(p.x + i, p.y + i) == false && finished[3] != true){
                     ghosts[i] = new Archer(p.x + i, p.y + i, ghost)
+                } else {
+                    finished[3] = true  
                 }
-                if (searchLoc(p.x, p.y + i) == false){
+                if (searchLoc(p.x, p.y + i) == false && finished[4] != true){
                     ghosts[i] = new Archer(p.x, p.y + i, ghost)
+                } else {
+                    finished[4] = true  
                 }
-                    
+                if (searchLoc(p.x - i, p.y + i) == false && finished[5] != true){
+                    ghosts[i] = new Archer(p.x - i, p.y + i, ghost)
+                } else {
+                    finished[5] = true  
+                }
+                if (searchLoc(p.x - i, p.y) == false && finished[6] != true){
+                    ghosts[i] = new Archer(p.x - i, p.y, ghost)
+                } else {
+                    finished[6] = true  
+                }
+                if (searchLoc(p.x - i, p.y - i) == false && finished[7] != true){
+                    ghosts[i] = new Archer(p.x - i, p.y - i, ghost)
+                } else {
+                    finished[7] = true  
+                }
                 
+            }
+        } else {
+            finished = []
+            type = p.constructor
+            
+            for (i = 1; i < 8; i++){
+                if (searchLoc(p.x, p.y - (i * 2), p) == false && finished[0] != true){
+                    drawGhost(p.x, p.y - (i * 2), p)  
+                } else {
+                    finished[0] = true 
+                }
+                if (searchLoc(p.x + i, p.y - i, p) == false && finished[1] != true){
+                    drawGhost(p.x + i, p.y - i, p)
+                } else {
+                    finished[1] = true  
+                }
+                if (searchLoc(p.x + (i * 2), p.y, p) == false && finished[2] != true){
+                    drawGhost(p.x + (i * 2), p.y, p)
+                } else {
+                    finished[2] = true  
+                }
+                if (searchLoc(p.x + i, p.y + i, p) == false && finished[3] != true){
+                    drawGhost(p.x + i, p.y + i, p)
+                } else {
+                    finished[3] = true  
+                }
+                if (searchLoc(p.x, p.y + (i * 2), p) == false && finished[4] != true){
+                    drawGhost(p.x, p.y + (i * 2), p)
+                } else {
+                    finished[4] = true  
+                }
+                if (searchLoc(p.x - i, p.y + i, p) == false && finished[5] != true){
+                    drawGhost(p.x - i, p.y + i, p)
+                } else {
+                    finished[5] = true  
+                }
+                if (searchLoc(p.x - (i * 2), p.y, p) == false && finished[6] != true){
+                    drawGhost(p.x - (i * 2), p.y, p)
+                } else {
+                    finished[6] = true  
+                }
+                if (searchLoc(p.x - i, p.y - i, p) == false && finished[7] != true){
+                    drawGhost(p.x - i, p.y - i, p)
+                } else {
+                    finished[7] = true  
+                }
+        
             }
         }
     }
